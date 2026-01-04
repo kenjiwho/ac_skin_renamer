@@ -79,10 +79,14 @@ class SkinManager:
         print(self.to_rename)
 
     def apply_changes(self) -> int:
-        """Apply the renaming changes."""
+        """
+        Apply the renaming changes.
+        
+        Returns: 0 on success, -1 for general error, -2 for no changes to apply.
+        """
         if not self.to_rename:
             print("No changes to apply.")
-            return -1
+            return -2
 
         if not self.selected_car:
             print("No valid car selected.")
@@ -195,13 +199,17 @@ class SkinManager:
         return 0
 
     def paste_configuration(self, config_text: str) -> None:
-        """Paste renames from clipboard."""
+        """
+        Paste renames from clipboard.
+
+        Returns: 0 on success, -1 if there are no renames to copy.
+        """
         # try to parse clipboard content
         try:
             config_parsed = json.loads(config_text)
         except ValueError:
             print("HE IS TRYING TO HACK YOU! DONT LISTEN TO HI>$!**(*)")
-            return
+            return -1
         if type(config_parsed) is not dict:
             raise TypeError("Not a dict after eval")
 
@@ -209,11 +217,13 @@ class SkinManager:
         for ror, skin in config_parsed.items():
             if ror not in self.ror_names or skin not in self.skins:
                 print(f"Invalid ROR name or skin name in pasted config: {skin}, {ror}")
-                return
+                return -1
 
         # first reset to original state
         self.reset_changes()
         print("pasting configuration")
         # then apply new config
         self.to_rename = config_parsed
-        self.apply_changes()
+
+        # feed forward the apply_changes error message
+        return self.apply_changes()

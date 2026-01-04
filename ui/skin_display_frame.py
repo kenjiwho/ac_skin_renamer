@@ -46,12 +46,12 @@ class SkinDisplayFrame(ttk.LabelFrame):
         )
         reset_button.pack(side="left", padx=10)
 
-        paste_button = ttk.Button(
+        self.paste_button = ttk.Button(
             button_frame,
             text="Paste configuration",
             command=self.paste_dialog,
         )
-        paste_button.pack(side="right", padx=10)
+        self.paste_button.pack(side="right", padx=10)
 
         self.copy_button = ttk.Button(
             button_frame,
@@ -62,6 +62,7 @@ class SkinDisplayFrame(ttk.LabelFrame):
         self.copy_button.pack(side="right", padx=10)
 
         self.copy_button_timer = None
+        self.paste_button_timer = None
         self.apply_button_timer = None
 
     def render_renames(self):
@@ -142,33 +143,34 @@ class SkinDisplayFrame(ttk.LabelFrame):
         Handle copy button click, update button text based on success or failure.
         """
         result = self.skin_manager.copy_configuration()
-        if result == -1:
-            if self.copy_button_timer:
-                self.after_cancel(self.copy_button_timer)
-            self.copy_button.config(text="No renames to copy...")
-            self.copy_button_timer = self.after(
-                1000, lambda: self.copy_button.config(text="Copy configuration")
-            )
-        else:
-            if self.copy_button_timer:
-                self.after_cancel(self.copy_button_timer)
-            self.copy_button.config(text="Success!")
-            self.copy_button_timer = self.after(
-                1000, lambda: self.copy_button.config(text="Copy configuration")
-            )
+        # select message for button
+        text = "No renames to copy..." if result == -1 else "Success!"
+        
+        if self.copy_button_timer:
+            self.after_cancel(self.copy_button_timer)
+        self.copy_button.config(text=text)
+        self.copy_button_timer = self.after(
+            1000, lambda: self.copy_button.config(text="Copy configuration")
+        )
+        
 
     def apply_handler(self):
         """
         Handle apply button click, update renames and re-render.
         """
         result = self.skin_manager.apply_changes()
-        if result == -1:
+        if result != 0: #display button message
+            if result == -2:
+                text= "No changes to apply..."
+            else:
+                text= "Failed to apply..."
             if self.apply_button_timer:
                 self.after_cancel(self.apply_button_timer)
-            self.apply_button.config(text="Failed to apply...")
+            self.apply_button.config(text=text)
             self.apply_button_timer = self.after(
                 1000, lambda: self.apply_button.config(text="Apply changes")
             )
+
         else:
             self.skin_manager.update_car_data(self.skin_manager.selected_car)
             self.render_renames()
@@ -187,5 +189,14 @@ class SkinDisplayFrame(ttk.LabelFrame):
         if not config_text:
             return
 
-        self.skin_manager.paste_configuration(config_text)
+        result = self.skin_manager.paste_configuration(config_text)
+        if result != 0:
+            tk.messagebox.showwarning(title ="Configuration status",  message="Configuration invalid!")
+        else:
+            if self.paste_button_timer:
+                self.after_cancel(self.paste_button_timer)
+            self.paste_button.config(text="Configuration updated!!!!!!!")
+            self.paste_button_timer = self.after(
+                1000, lambda: self.paste_button.config(text="Paste configurtion")
+            )
         self.render_renames()
