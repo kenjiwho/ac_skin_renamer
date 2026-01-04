@@ -3,10 +3,9 @@
 A small utility for renaming Assetto Corsa skins.  
 You can either download a prebuilt executable or build it yourself.
 
-# To use this app:
-download the latest release here https://github.com/kenjiwho/ac_skin_renamer/releases
+### To use this app:
+Download the latest release here https://github.com/kenjiwho/ac_skin_renamer/releases
 
-or build the executable on your own machine
 # Building the executable
 
 ## Short version
@@ -41,5 +40,6 @@ When the build script is done (build finished is written in the terminal).
 Now you have the executible: ac_renamer.exe, this file can be used on it's own (no code other than the exe file is used when executing the exe file). 
 
 Note: It will create a folder and a file at it's directory to store data so placing it in a folder before execution is advised.
+
 
 
