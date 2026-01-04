@@ -1,9 +1,37 @@
-# Build code to executable
-clone project:
+# To use this app:
+download the latest release here https://github.com/kenjiwho/ac_skin_renamer/releases
+
+or build the executable on your own machine
+# Building the executable
+
+## Short version
+1. clone project:
 ```bash
-git clone https://github.com/konjiii/ac_skin_renamer.git
+git clone https://github.com/kenjiwho/ac_skin_renamer.git
 ```
-run build script:
+2. go into the main folder and run build script:
 ```bash
 ./build.ps1
 ```
+Now you have the executible: ac_renamer.exe, this can be used on it's own.
+
+Note: It will create a folder at it's directory to store data so placing it in a folder before execution is advised.
+
+## Detailed version (windows)
+1. While in the file explorer, rightclick and select: open terminal.
+2. Download the app by typing the following:
+```bash
+git clone https://github.com/kenjiwho/ac_skin_renamer.git
+```
+3. Go into the downloaded folder by typing:
+```bash
+cd ac_skin_renamer
+```
+4. Run build script:
+```bash
+./build.ps1
+```
+When the build script is done (build finished is written in the terminal).
+Now you have the executible: ac_renamer.exe, this file can be used on it's own (no code other than the exe file is used when executing the exe file). 
+
+Note: It will create a folder at it's directory to store data so placing it in a folder before execution is advised.
